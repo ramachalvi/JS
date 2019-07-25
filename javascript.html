@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-10 offset-1">
+        <form action="javascript:void(0);" method="post" onsubmit="app.Add()">
+          <input type="text" id="addName" placeholder="name" />
+
+        </form>
+
+        <div class="formalamat">
+          <form action="javascript:void(0);" method="post" onsubmit="app.Add()">
+            <input type="text" id="addAlamat" placeholder="alamat" />
+            <input type="submit" value="Tambah" />
+          </form>
+        </div>
+
+        <div id="formEdit" role="aria-hidden">
+          <form action="javascript:void(0);" method="post" id="saveEdit" onsubmit="">
+            <input type="text" id="editName" />
+            <input type="text" id="editAlamat">
+            <input type="submit" value="Edit" />
+            <a onclick="CloseInput()" aria-label="Close">X</a>
+          </form>
+        </div>
+
+        <p id="hitung"></p>
+
+        <table class="table-responsive">
+          <tr>
+            <th>Nama</th>
+            <th>Alamat</th>
+            <th>Aksi</th>
+          </tr>
+          <tbody id="name"></tbody>
+          <tbody id="alamat"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let app = new (function (data) {
+      this.getName = document.getElementById('name');
+      this.getAlamat = document.getElementById('alamat');
+      this.Name = [];
+      this.Alamat = [];
+
+      this.Hitung = function (data) {
+        let use = document.getElementById('hitung');
+        let nama = 'Siswa';
+
+        if (data) {
+          use.innerHTML = data + ' ' + 'Siswa';
+        } else {
+          use.innerHTML = 'Tidak ada' + name;
+        }
+      };
+
+      this.ShowData = function () {
+        let data1 = ' ';
+        if (this.Name.length > 0) {
+          for (i = 0; i < this.Name.length; i++) {
+            data1 += '<tr>';
+            data1 += '<td>' + this.Name[i] + '</td>';
+            data1 += '<td>' + this.Alamat[i] + '</td>';
+            data1 +=
+              '<td> <button class="btn btn-info" onclick="app.Edit (' +
+              i +
+              ')"> Edit </button>';
+            data1 +=
+              '<td> <button class="btn btn-danger" onclick="app.Delete (' +
+              i +
+              ')"> Delete </button>';
+            data1 += '</tr>';
+          }
+        }
+        this.Hitung(this.Name.length);
+        return (this.getName.innerHTML = data1);
+        return (this.getAlamat.innerHTML = data1);
+      };
+
+      this.Add = function () {
+        let getIdAddName = document.getElementById('addName');
+        let add = getIdAddName.value;
+
+        let getIdAddAlamat = document.getElementById('addAlamat');
+        let alm = getIdAddAlamat.value;
+
+        if (getIdAddName) {
+          this.Name.push(add.trim());
+          this.Alamat.push(alm.trim());
+
+          
+
+          getIdAddName.value = ' ';
+          this.ShowData();
+        }
+      };
+
+
+
+      this.Edit = function (item) {
+        let edit = document.getElementById('editName');
+        edit.value = this.Name[item];
+
+        let edits = document.getElementById('editAlamat');
+        edits.value = this.Alamat[item];
+
+        document.getElementById('formEdit').style.display = 'block';
+
+        yurod = this;
+        document.getElementById('saveEdit').onsubmit = function () {
+          let newName = edit.value;
+          let newAlamat = edits.value;
+
+          if (newName) {
+            yurod.Name.splice(item, 1, newName.trim());
+            yurod.Alamat.splice(item, 1, newAlamat.trim());
+            yurod.ShowData();
+            CloseInput();
+          }
+        };
+      };
+
+      this.Delete = function (item) {
+        this.Name.splice(item, 1);
+        this.ShowData();
+      };
+    })();
+
+    function CloseInput() {
+      document.getElementById('formEdit').style.display = 'none';
+    };
+  </script>
+</body>
+
+</html>
